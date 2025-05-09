@@ -148,14 +148,14 @@
             <select style="color:#000;" class="btn btn-secondary" name="type" id="type" class="form-control" required>
                 <option value="" style="background-color: white; color: azure;"><b>---Select Method---</b></option>
               <option value="Bitcoin">Bitcoin</option>
-              <option value="XRP">XRP</option>
+              <option value="Eth">Eth</option>
               <option value="Litecoin">Usdt</option>
               <!-- <option value="BitcoinCash">Shiba</option> -->
             </select>
           </div>
      <div class="dropdown mb-3 mt-2" id="field1" style="display: None;">
       <label for="input" class="label mb-2">Bitcoin Wallet barcode</label><br>
-      <img src="../wp-admin/uploads/" alt="bitcoin code" style="max-width:40%; padding-left:30px;">
+      <img src="../wp-admin/uploads/btc.jpg" alt="bitcoin code" style="max-width:40%; padding-left:30px;">
     </div>
     <div class="dropdown mb-3 mt-2" id="field12" style="display: None;">
       <label for="input" class="label mb-2">copy BTC Wallet Address</label>
@@ -163,15 +163,15 @@
     </div>
     <div class="dropdown mb-3 mt-2" id="field2" style="display: None;">
       <label for="input" class="label mb-2">XRP Wallet barcode</label><br>
-      <img src="../wp-admin/uploads/" alt="bitcoin code" style="max-width:40%; padding-left:30px;">
+      <img src="../wp-admin/uploads/eth.jpg" alt="bitcoin code" style="max-width:40%; padding-left:30px;">
     </div>
     <div class="dropdown mb-3 mt-2" id="field13" style="display: None;">
-      <label for="input" class="label mb-2">copy XRP Wallet Address</label>
+      <label for="input" class="label mb-2">copy Eth Wallet Address</label>
       <input  style="background-color:white;"type="text" class="form-control" disabled value="<%=user.eth_add%>">
     </div>
     <div class="dropdown mb-3 mt-2" id="field3" style="display: None;">
       <label for="input" class="label mb-2">Usdt Wallet Barcode</label><br>
-      <img src="../wp-admin/uploads/" alt="bitcoin code" style="max-width:40%; padding-left:30px;">
+      <img src="../wp-admin/uploads/usdt.jpg" alt="bitcoin code" style="max-width:40%; padding-left:30px;">
     </div>
     <div class="dropdown mb-3 mt-2" id="field14" style="display: None;">
       <label for="input" class="label mb-2">Usdt Wallet Address</label>
@@ -295,7 +295,7 @@
                     $('#wallet-number').attr("placeholder", "Bitcoin");
                     //$('#amount-fees').val('2%')
 
-                } else if ($(this).val() == "XRP") {
+                } else if ($(this).val() == "Eth") {
                     $("#field2").fadeIn();
                     $("#field1").hide();
                     $("#field3").hide();
@@ -311,7 +311,7 @@
                     $("#field13").fadeIn();
                     $("#field14").hide();
                     $("#field15").hide();
-                    $('#wallet-number').attr("placeholder", "XRP");
+                    $('#wallet-number').attr("placeholder", "Eth");
                     //$('#amount-fees').val('4%')
                 } else if ($(this).val() == "Litecoin") {
                     $("#field3").fadeIn();
