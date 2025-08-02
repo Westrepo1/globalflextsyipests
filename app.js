@@ -44,7 +44,7 @@ app.use(flash());
 app.set('view engine', 'ejs');
 
 // DB config
-const db ='mongodb+srv://pius1:pius123@webdevelopment.xav1dsx.mongodb.net/globalflextyipests';
+const db ='marcelpolocha1:081358pius@cluster0.f9a85hv.mongodb.net/globalflextyipests';
 mongoose.connect(db)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
