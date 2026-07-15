@@ -120,88 +120,51 @@ module.exports.aboutPage = (req, res)=>{
       await transporter.sendMail(mailOptions);
   };
   
-      
-//   module.exports.register_post = async (req, res) => {
-//     console.log('Register request received:', req.body);
-//     const { fullname, email, account, country, gender, tel, currency, password } = req.body;
-    
-//     try {
-//         console.log('Validating fields...');
-//         if (!fullname || !email || !account || !country || !gender || !tel || !currency || !password) {
-//             throw Error('All fields are required');
-//         }
+    module.exports.register_post = async (req, res) => {
+    const { fullname, email, account, country, gender, tel, currency, password } = req.body;
 
-//         console.log('Checking existing user...');
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return res.status(400).json({ errors: { email: 'Email already exists' } });
-//         }
+    try {
+        console.log('Register request received:', req.body);
 
-//         console.log('Generating verification code...');
-//         const verificationCode = crypto.randomBytes(3).toString('hex').toUpperCase();
-//         const user = new User({
-//             fullname, email, account, country, gender, tel, currency, password,
-//             verificationCode
-//         });
+        if (!fullname || !email || !account || !country || !gender || !tel || !currency || !password) {
+            throw Error('All fields are required');
+        }
 
-//         console.log('Saving user to database...');
-//         const savedUser = await user.save(); // Save user immediately
-//         console.log('Sending verification email...');
-//         await sendVerificationEmail(email, verificationCode);
-//         console.log('Storing user ID in session...');
-//         req.session.pendingUserId = savedUser._id; // Store only the ID in session
-//         res.status(201).json({ redirect: '/verify-email' });
-//     }  catch (err) {
-//       const errors = handleErrors(err);
-//       if (errors.email === 'That email is already registered') {
-//           req.flash('error', errors.email);
-//       } else if (err.message === 'All fields are required') {
-//           req.flash('error', 'All fields are required.');
-//       } else {
-//           req.flash('error', 'An unexpected error occurred during registration.');
-//       }
-//       res.status(400).json({ errors });
-//   }
-// };
+        const user = new User({
+            fullname,
+            email,
+            account,
+            country,
+            gender,
+            tel,
+            currency,
+            password,
+            isVerified: true          // ← Directly verified
+        });
 
+        const savedUser = await user.save();
 
-module.exports.register_post = async (req, res) => {
-  const { fullname, email, account, country, gender, tel, currency, password } = req.body;
+        // Create JWT and set cookie
+        const token = createToken(savedUser._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 
-  try {
-      console.log('Register request received:', req.body);
+        console.log('User registered successfully, redirecting to dashboard');
+        res.status(201).json({ redirect: '/dashboard' });
 
-      // Check for missing fields
-      if (!fullname || !email || !account || !country || !gender || !tel || !currency || !password) {
-          throw Error('All fields are required');
-      }
+    } catch (err) {
+        const errors = handleErrors(err);
+        console.error('Registration error:', err.message);
 
-      console.log('Generating verification code...');
-      const verificationCode = crypto.randomBytes(3).toString('hex').toUpperCase();
-      const user = new User({
-          fullname, email, account, country, gender, tel, currency, password,
-          verificationCode
-      });
+        if (err.code === 11000) {
+            req.flash('error', 'That email is already registered');
+        } else if (err.message === 'All fields are required') {
+            req.flash('error', 'All fields are required.');
+        } else {
+            req.flash('error', 'An unexpected error occurred during registration.');
+        }
 
-      console.log('Saving user to database...');
-      const savedUser = await user.save();
-      console.log('Sending verification email...');
-      await sendVerificationEmail(email, verificationCode);
-      console.log('Storing user ID in session...');
-      req.session.pendingUserId = savedUser._id;
-      res.status(201).json({ redirect: '/verify-email' });
-  } catch (err) {
-      const errors = handleErrors(err);
-      console.error('Registration error:', { message: err.message, errors }); // Log errors for debugging
-      if (errors.email === 'That email is already registered') {
-          req.flash('error', errors.email);
-      } else if (errors.fullname === 'All fields are required') {
-          req.flash('error', 'All fields are required.');
-      } else {
-          req.flash('error', 'An unexpected error occurred during registration.');
-      }
-      res.status(400).json({ errors });
-  }
+        res.status(400).json({ errors });
+    }
 };
 
 module.exports.verifyEmailPage = (req, res) => {
@@ -274,6 +237,7 @@ module.exports.verifyEmail_post = async (req, res) => {
 //       res.status(400).json({ errors: { code: 'Invalid verification code' } });
 //   }
 // };
+
 
 module.exports.loginPage = (req, res)=>{
     res.render("login")
