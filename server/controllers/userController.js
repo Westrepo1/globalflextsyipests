@@ -326,7 +326,7 @@ module.exports.login_post = async (req, res) => {
           req.flash('error', 'Invalid password.');
       } else if (err.message === 'Your account is not verified. Please verify it or create another account.') {
           req.flash('error', err.message);
-      } else if (err.message === 'Your account is suspended. If you believe this is a mistake, please contact support at support@vitacoininvestments.com.') {
+      } else if (err.message === 'Your account is suspended. If you believe this is a mistake, please contact support at support@globalflextyipests.com') {
           req.flash('error', err.message);
       } else {
           req.flash('error', 'An unexpected error occurred.');
@@ -336,8 +336,7 @@ module.exports.login_post = async (req, res) => {
 };
 
 module.exports.dashboardPage = async(req, res) =>{
-  const user = res.locals.user;
-  res.render('dashboard', { user, showKycModal: !user.kycVerified });
+  res.render('dashboard');
 }
 
 module.exports.navbarPage = async(req, res)=>{
